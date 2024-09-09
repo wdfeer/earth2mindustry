@@ -1,4 +1,5 @@
 import os
+from img_utils import *
 import numpy as np
 from PIL import Image, ImageGrab
 from time import sleep
@@ -7,67 +8,54 @@ from time import sleep
 if not os.path.exists('images'):
     os.makedirs('images')
 
-# Helper function to map colors
-def map_colors(img_array):
-    # Define the color mappings
+def water_grass(img_array):
     colormap = {
-        (156, 192, 249): (0x47, 0x54, 0x8f, 255), # 9cc0f9 -> 47548f
-        (229, 227, 223): (0x54, 0x84, 0x49, 255)  # e5e3df -> 548449
+        (0x9c, 0xc0, 0xf9, 255): (0x47, 0x54, 0x8f, 255),
+        (0xe5, 0xe3, 0xdf, 255): (0x54, 0x84, 0x49, 255)
     }
-    
-    # Function to find the closest color in the colormap
-    def closest_color(pixel):
-        pixel = tuple(pixel[:3])  # Use only RGB values, ignoring alpha if present
-        distances = [np.sqrt(np.sum((np.array(pixel) - np.array(key))**2)) for key in colormap.keys()]
-        closest = list(colormap.keys())[distances.index(min(distances))]
-        return colormap[closest]
+    return remap_colors(img_array, colormap)
 
-    height, width, _ = img_array.shape
-    new_array = np.empty(img_array.shape, dtype=tuple)
+def transform_image(img):
+    old_array = np.array(img)
 
-    for y in range(height):
-        for x in range(width):
-            new_array[y, x] = closest_color(img_array[y, x])
+    new_array = water_grass(old_array)
+
+    return Image.fromarray(new_array.astype('uint8'))
+
+last_image = None
+def get_clipboard_image():
+    global last_image
+    img = ImageGrab.grabclipboard()
+
+    if img is None:
+        print("No image in clipboard found.")
+        return None
+    if img == last_image:
+        print("Duplicate image found.")
+        return None
     
-    return new_array
+    last_image = img
+    return img
 
 # Initialize counter for filenames
 counter = 1
-last_image = None
-
 def process_image():
     global counter
-    global last_image
-    # Grab image from clipboard
-    img = ImageGrab.grabclipboard()
-    
-    if img is None or img == last_image:
-        print("No new image found in clipboard.")
+
+    clip_img = get_clipboard_image()
+    if clip_img is None:
         return
 
     # Generate file names
     input_filename = f'images/in_{counter}.png'
     output_filename = f'images/out_{counter}.png'
 
-    # Save the image from the clipboard
-    img.save(input_filename)
-
-    # Convert PIL image to numpy array
-    img_array = np.array(img)
-
-    # Process the image
-    processed_array = map_colors(img_array)
-    
-    # Convert numpy array back to PIL Image
-    processed_img = Image.fromarray(processed_array.astype('uint8'))
-
-    # Save the processed image
-    processed_img.save(output_filename)
+    clip_img.save(input_filename)
+    transform_image(clip_img).save(output_filename)
 
     print(f"Image saved as {input_filename} and processed as {output_filename}")
 
     counter += 1
-    last_image = img
 
 if __name__ == "__main__":
     while True:
