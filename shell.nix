@@ -2,7 +2,7 @@
 
 pkgs.mkShell {
   buildInputs = [
-    pkgs.xclip
+    pkgs.xclip # for accessing the clipboard on X11 systems
     pkgs.python3
     pkgs.python3Packages.pillow
     pkgs.python3Packages.numpy
