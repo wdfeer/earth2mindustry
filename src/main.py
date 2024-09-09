@@ -1,4 +1,5 @@
 import os
+import sys
 from PIL import ImageGrab
 from time import sleep
 from mindustry import *
@@ -41,6 +42,9 @@ def process_image():
     counter += 1
 
 if __name__ == "__main__":
-    while True:
+    if len(sys.argv) == 1:
         process_image()
-        sleep(0.5)
+    else:
+        while True:
+            process_image()
+            sleep(2)
