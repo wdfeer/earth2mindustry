@@ -1,6 +1,7 @@
 from img_utils import *
-import numpy as np
 from PIL import Image
+import numpy as np
+import time
 
 deep_water = (61, 73, 128)
 water = (71, 84, 143)
@@ -25,11 +26,17 @@ def blend_sand(array, radius = 4):
 
 def convert_to_mindustry_map(img):
     print("Starting conversion...")
+    start_time = time.time()
     
     array = remove_alpha(np.array(img))
 
     array = remap_to_water_and_grass(array)
     array = blend_shallow_water(array)
     array = blend_sand(array)
+    
+    img = Image.fromarray(array.astype('uint8'))
+    
+    elapsed = time.time() - start_time
+    print(f"Done! ({elapsed:.2f} s)")
 
-    return Image.fromarray(array.astype('uint8'))
+    return img
