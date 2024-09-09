@@ -6,6 +6,7 @@ pkgs.mkShell {
     pkgs.python3
     pkgs.python3Packages.pillow
     pkgs.python3Packages.numpy
+    pkgs.python3Packages.scipy
   ];
 
   shellHook = ''
