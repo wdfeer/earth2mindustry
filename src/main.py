@@ -2,7 +2,7 @@ import os
 import sys
 from PIL import ImageGrab
 from time import sleep
-from mindustry import *
+from mindustry import convert_to_mindustry_map
 
 # Ensure the images directory exists
 if not os.path.exists('images'):
