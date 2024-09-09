@@ -71,9 +71,12 @@ def blend(array, target_color, new_color, required_color, radius):
     target_mask = np.all(array == target_color, axis=-1)
     required_mask = np.all(array == required_color, axis=-1)
 
-    # Dilate the required color mask by the given radius
-    struct_elem = np.ones((2 * radius + 1, 2 * radius + 1), dtype=bool)
-    required_dilated = binary_dilation(required_mask, structure=struct_elem)
+    # Create a circular structuring element
+    y, x = np.ogrid[-radius:radius + 1, -radius:radius + 1]
+    circular_mask = x**2 + y**2 <= radius**2
+
+    # Dilate the required color mask using the circular structuring element
+    required_dilated = binary_dilation(required_mask, structure=circular_mask)
 
     # Find where the target color overlaps with the dilated required color mask
     blend_mask = target_mask & required_dilated
