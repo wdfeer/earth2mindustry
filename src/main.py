@@ -1,60 +1,75 @@
-import osmnx as ox
-from PIL import Image
-import sys
+import os
+import numpy as np
+from PIL import Image, ImageGrab
+from time import sleep
 
-def fetch_and_render_map(lon1, lat1, lon2, lat2):
-    # Fetch the land and water data
-    gdf = ox.features_from_bbox(bbox=(lat1, lon1, lat2, lon2), tags={'natural': True, 'landuse': True})
+# Ensure the images directory exists
+if not os.path.exists('images'):
+    os.makedirs('images')
 
-    # Initialize a grid to hold the data
-    resolution = 1000
-    img_width = resolution
-    img_height = resolution
+# Helper function to map colors
+def map_colors(img_array):
+    # Define the color mappings
+    colormap = {
+        (156, 192, 249): (0x47, 0x54, 0x8f, 255), # 9cc0f9 -> 47548f
+        (229, 227, 223): (0x54, 0x84, 0x49, 255)  # e5e3df -> 548449
+    }
+    
+    # Function to find the closest color in the colormap
+    def closest_color(pixel):
+        pixel = tuple(pixel[:3])  # Use only RGB values, ignoring alpha if present
+        distances = [np.sqrt(np.sum((np.array(pixel) - np.array(key))**2)) for key in colormap.keys()]
+        closest = list(colormap.keys())[distances.index(min(distances))]
+        return colormap[closest]
 
-    # Create a blank image with white background
-    image = Image.new('RGB', (img_width, img_height), 'white')
-    pixels = image.load()
+    height, width, _ = img_array.shape
+    new_array = np.empty(img_array.shape, dtype=tuple)
 
-    # Define scaling factors to fit the bounding box into the image dimensions
-    lat_min, lon_min, lat_max, lon_max = lat1, lon1, lat2, lon2
-    lat_range = lat_max - lat_min
-    lon_range = lon_max - lon_min
+    for y in range(height):
+        for x in range(width):
+            new_array[y, x] = closest_color(img_array[y, x])
+    
+    return new_array
 
-    def lat_lon_to_pixel(lat, lon):
-        x = int((lon - lon_min) / lon_range * (img_width - 1))
-        y = int((1 - (lat - lat_min) / lat_range) * (img_height - 1))
-        return x, y
+# Initialize counter for filenames
+counter = 1
+last_image = None
 
-    # Render land and water areas
-    for _, row in gdf.iterrows():
-        geom = row['geometry']
-        if geom.is_empty:
-            continue
-        
-        if geom.geom_type == 'Polygon' or geom.geom_type == 'MultiPolygon':
-            if 'natural' in row and row['natural'] == 'water':
-                color = (0, 0, 255)  # Blue for water
-            else:
-                color = (0, 255, 0)  # Green for land
-            
-            if geom.geom_type == 'Polygon':
-                for x, y in geom.exterior.coords:
-                    px, py = lat_lon_to_pixel(y, x)
-                    pixels[px, py] = color
-            else:
-                for poly in geom:
-                    for x, y in poly.exterior.coords:
-                        px, py = lat_lon_to_pixel(y, x)
-                        pixels[px, py] = color
+def process_image():
+    global counter
+    global last_image
+    # Grab image from clipboard
+    img = ImageGrab.grabclipboard()
+    
+    if img is None or img == last_image:
+        print("No new image found in clipboard.")
+        return
 
-    # Save the image
-    image.save('map_image.png')
-    print("Map image saved as 'map_image.png'")
+    # Generate file names
+    input_filename = f'images/in_{counter}.png'
+    output_filename = f'images/out_{counter}.png'
 
-if __name__ == '__main__':
-    if len(sys.argv) != 5:
-        print("Usage: python src/main.py <lon1> <lat1> <lon2> <lat2>")
-        sys.exit(1)
+    # Save the image from the clipboard
+    img.save(input_filename)
 
-    lon1, lat1, lon2, lat2 = map(float, sys.argv[1:])
-    fetch_and_render_map(lon1, lat1, lon2, lat2)
+    # Convert PIL image to numpy array
+    img_array = np.array(img)
+
+    # Process the image
+    processed_array = map_colors(img_array)
+    
+    # Convert numpy array back to PIL Image
+    processed_img = Image.fromarray(processed_array.astype('uint8'))
+
+    # Save the processed image
+    processed_img.save(output_filename)
+
+    print(f"Image saved as {input_filename} and processed as {output_filename}")
+
+    counter += 1
+    last_image = img
+
+if __name__ == "__main__":
+    while True:
+        process_image()
+        sleep(0.5)
