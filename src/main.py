@@ -36,7 +36,7 @@ def process_image():
 
     game_map = convert_to_mindustry_map(clip_img)
     game_map.save(f'images/out_{counter}.png')
-    print(f"Mindustry map image save as out_{counter}.png")
+    print(f"Mindustry map image saved as out_{counter}.png")
 
     counter += 1
 

@@ -91,7 +91,7 @@ def blend(array, target_color, new_color, required_color, radius):
 					ny, nx = y + dy, x + dx
 					# Ensure the surrounding pixel is within bounds and within the radius
 					if 0 <= ny < height and 0 <= nx < width:
-						if tuple(array[ny, nx]) == required_color: # and is_within_radius((x, y), (nx, ny), radius):
+						if tuple(array[ny, nx]) == required_color and is_within_radius((x, y), (nx, ny), radius):
 							found_required_color = True
 							break
 				if found_required_color:
