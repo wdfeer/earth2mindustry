@@ -3,6 +3,11 @@ from PIL import Image
 import numpy as np
 import time
 
+# Colors of Google Maps with Silver style preset (https://mapstyle.withgoogle.com)
+input_water = (201, 201, 201)
+input_grass = (245, 245, 245)
+
+# Mindustry map-image colors
 deep_water = (61, 73, 128)
 water = (71, 84, 143)
 grass = (84, 132, 73)
@@ -11,8 +16,8 @@ sand = (167, 137, 111)
 def remap_to_water_and_grass(array):
     print("Mapping image to deep water and grass...")
     colormap = {
-        (0x9c, 0xc0, 0xf9): deep_water,
-        (0xe5, 0xe3, 0xdf): grass
+        input_water: deep_water,
+        input_grass: grass
     }
     return remap_colors(array, colormap)
 
