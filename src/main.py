@@ -1,50 +1,49 @@
 import os
-import sys
+import re
+import webbrowser
 from PIL import ImageGrab
 from time import sleep
 from mindustry import convert_to_mindustry_map
 
-# Ensure the images directory exists
-if not os.path.exists('images'):
-    os.makedirs('images')
+def get_highest_counter():
+    regex = re.compile(r'_(\d+)\.png$')
 
-last_image = None
-def get_clipboard_image():
-    global last_image
-    img = ImageGrab.grabclipboard()
+    highest_number = -1
 
-    if img is None:
-        print("No image in clipboard found.")
-        return None
-    if img == last_image:
-        print("Duplicate image found.")
-        return None
+    for filename in os.listdir(img_dir):
+        match = regex.search(filename)
+        if match:
+            file_number = int(match.group(1))
+            if file_number > highest_number:
+                highest_number = file_number
+
+    return highest_number
+
+def process_image(img):
+    counter = get_highest_counter() + 1
     
-    last_image = img
-    return img
-
-# Initialize counter for filenames
-counter = 1
-def process_image():
-    global counter
-
-    clip_img = get_clipboard_image()
-    if clip_img is None:
-        return
-
-    clip_img.save(f'images/in_{counter}.png')
+    img.save(f'images/in_{counter}.png')
     print(f"Clipboard image saved as in_{counter}.png")
 
-    game_map = convert_to_mindustry_map(clip_img)
+    game_map = convert_to_mindustry_map(img)
     game_map.save(f'images/out_{counter}.png')
     print(f"Mindustry map image saved as out_{counter}.png")
 
-    counter += 1
+
+img_dir = "images"
+map_link = "https://mapstyle.withgoogle.com"
 
 if __name__ == "__main__":
-    if len(sys.argv) == 1:
-        process_image()
-    else:
-        while True:
-            process_image()
-            sleep(2)
+    webbrowser.open(map_link)
+    
+    if not os.path.exists(img_dir):
+        os.makedirs(img_dir)
+    
+    clipboard_image = ImageGrab.grabclipboard()
+    if clipboard_image is None:
+        print("Waiting for a clipboard image...")
+    while clipboard_image == None:
+        sleep(1.5)
+        clipboard_image = ImageGrab.grabclipboard()
+        
+    process_image(clipboard_image)
