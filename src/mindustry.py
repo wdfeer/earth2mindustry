@@ -5,42 +5,54 @@ import time
 
 # Colors of Google Maps with Silver style preset (https://mapstyle.withgoogle.com)
 input_water = (201, 201, 201)
-input_grass = (245, 245, 245)
+input_land = (245, 245, 245)
 
 # Mindustry map-image colors
 deep_water = (61, 73, 128)
 shallow_water = (71, 84, 143)
 sand_water = (116, 104, 122)
-grass = (84, 132, 73)
 sand = (167, 137, 111)
+grass = (84, 132, 73)
+snow = (179, 183, 187)
 
-def remap_to_water_and_grass(array):
+def remap_to(array):
     print("Mapping image to deep water and grass...")
     colormap = {
         input_water: deep_water,
-        input_grass: grass
+        input_land: land
     }
     return remap_colors(array, colormap)
 
 def blend_shallow_water(array, radius = 10):
     print(f"Blending shallow water {radius} blocks around the coastline...")
-    return blend(array, deep_water, shallow_water, grass, radius)
+    return blend(array, deep_water, shallow_water, land, radius)
 
 def blend_sand(array, radius = 6):
     print(f"Blending sand {radius} blocks around the coastline...")
-    return blend(array, grass, sand, shallow_water, radius)
+    return blend(array, land, sand, shallow_water, radius)
 
 def blend_sand_water(array, radius = 3):
     print(f"Blending sand water {radius} blocks around the coastline...")
     return blend(array, shallow_water, sand_water, sand, radius)
 
-def convert_to_mindustry_map(img):
+land = ""
+def convert_to_mindustry_map(img, preset):
+    global land
+    
     print("Starting conversion...")
     start_time = time.time()
     
     array = remove_alpha(np.array(img))
 
-    array = remap_to_water_and_grass(array)
+    match preset:
+        case "green":
+            land = grass
+        case "cold":
+            land = snow
+        case _:
+            raise ValueError("Invalid preset argument: expected 'green' or 'cold'")
+        
+    array = remap_to(array)
     array = blend_shallow_water(array)
     array = blend_sand(array)
     array = blend_sand_water(array)

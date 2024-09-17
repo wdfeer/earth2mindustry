@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import webbrowser
 from PIL import ImageGrab
 from time import sleep
@@ -19,13 +20,13 @@ def get_highest_counter():
 
     return highest_number
 
-def process_image(img):
+def process_image(img, preset):
     counter = get_highest_counter() + 1
     
     img.save(f'images/in_{counter}.png')
     print(f"Clipboard image saved as in_{counter}.png")
 
-    game_map = convert_to_mindustry_map(img)
+    game_map = convert_to_mindustry_map(img, preset)
     game_map.save(f'images/out_{counter}.png')
     print(f"Mindustry map image saved as out_{counter}.png")
 
@@ -34,16 +35,22 @@ img_dir = "images"
 map_link = "https://mapstyle.withgoogle.com"
 
 if __name__ == "__main__":
-    webbrowser.open(map_link)
-    
-    if not os.path.exists(img_dir):
-        os.makedirs(img_dir)
+    if len(sys.argv) <= 1 or (sys.argv[1] != "green" and sys.argv[1] != "cold"):
+        print("Preset argument not recognized. Defaulting to 'green'.")
+        preset = "green"
+    else:
+        preset = sys.argv[1]
     
     clipboard_image = ImageGrab.grabclipboard()
     if clipboard_image is None:
+        print(f"Opening {map_link}")
+        webbrowser.open(map_link)
         print("Waiting for a clipboard image...")
     while clipboard_image == None:
         sleep(1.5)
         clipboard_image = ImageGrab.grabclipboard()
-        
-    process_image(clipboard_image)
+    
+    if not os.path.exists(img_dir):
+        os.makedirs(img_dir)
+    
+    process_image(clipboard_image, preset)
