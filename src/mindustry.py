@@ -14,44 +14,42 @@ sand_water = (116, 104, 122)
 sand = (167, 137, 111)
 grass = (84, 132, 73)
 snow = (179, 183, 187)
+ice = (162, 162, 194)
 
 def remap_to(array):
     print("Mapping image to deep water and grass...")
     colormap = {
         input_water: deep_water,
-        input_land: land
+        input_land: preset.land
     }
     return remap_colors(array, colormap)
 
 def blend_shallow_water(array, radius = 10):
     print(f"Blending shallow water {radius} blocks around the coastline...")
-    return blend(array, deep_water, shallow_water, land, radius)
+    return blend(array, preset.deep_water, preset.shallow_water, preset.land, radius)
 
 def blend_sand(array, radius = 6):
     print(f"Blending sand {radius} blocks around the coastline...")
-    return blend(array, land, sand, shallow_water, radius)
+    return blend(array, preset.land, preset.coast_land, preset.shallow_water, radius)
 
 def blend_sand_water(array, radius = 3):
     print(f"Blending sand water {radius} blocks around the coastline...")
-    return blend(array, shallow_water, sand_water, sand, radius)
+    return blend(array, preset.shallow_water, preset.coast_water, preset.coast_land, radius)
 
-land = ""
-def convert_to_mindustry_map(img, preset):
-    global land
-    
+preset = None
+def set_preset(new_preset):
+    global preset
+    preset = new_preset
+
+def convert_to_mindustry_map(img):    
     print("Starting conversion...")
     start_time = time.time()
     
     array = remove_alpha(np.array(img))
 
-    match preset:
-        case "green":
-            land = grass
-        case "cold":
-            land = snow
-        case _:
-            raise ValueError("Invalid preset argument: expected 'green' or 'cold'")
-        
+    current_land = preset.land
+    current_coast_water = preset.coast_water
+
     array = remap_to(array)
     array = blend_shallow_water(array)
     array = blend_sand(array)

@@ -4,7 +4,8 @@ import sys
 import webbrowser
 from PIL import ImageGrab
 from time import sleep
-from mindustry import convert_to_mindustry_map
+from mindustry import convert_to_mindustry_map, set_preset
+from preset import Presets
 
 def get_highest_counter():
     regex = re.compile(r'_(\d+)\.png$')
@@ -26,7 +27,8 @@ def process_image(img, preset):
     img.save(f'images/in_{counter}.png')
     print(f"Clipboard image saved as in_{counter}.png")
 
-    game_map = convert_to_mindustry_map(img, preset)
+    set_preset(preset)
+    game_map = convert_to_mindustry_map(img)
     game_map.save(f'images/out_{counter}.png')
     print(f"Mindustry map image saved as out_{counter}.png")
 
@@ -35,11 +37,14 @@ img_dir = "images"
 map_link = "https://mapstyle.withgoogle.com"
 
 if __name__ == "__main__":
-    if len(sys.argv) <= 1 or (sys.argv[1] != "green" and sys.argv[1] != "cold"):
-        print("Preset argument not recognized. Defaulting to 'green'.")
-        preset = "green"
+    if len(sys.argv) <= 1:
+        print("Preset argument not specified. Defaulting to 'green'.")
+        preset = Presets.green
     else:
-        preset = sys.argv[1]
+        preset = Presets.find_preset_by_name(sys.argv[1])
+        if preset == None:
+            print("Invalid preset. Defaulting to 'green'.")
+            preset = Presets.green
     
     clipboard_image = ImageGrab.grabclipboard()
     if clipboard_image is None:
