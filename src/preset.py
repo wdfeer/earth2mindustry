@@ -21,3 +21,4 @@ class Presets(Enum):
     
     green = Preset(name="green")
     cold = Preset(name="cold", land=snow)
+    arctic = Preset(name="arctic", land=snow, coast_land=ice, coast_water=ice)
