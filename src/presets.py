@@ -1,15 +1,16 @@
 from dataclasses import dataclass
 from enum import Enum
 from mindustry import *
+from tiles import Tiles
 
 @dataclass
 class Preset():
     name: str
-    land: tuple = grass
-    coast_land: tuple = sand
-    coast_water: tuple = sand_water
-    shallow_water: tuple = shallow_water
-    deep_water: tuple = deep_water
+    land: tuple = Tiles.grass
+    coast_land: tuple = Tiles.sand
+    coast_water: tuple = Tiles.sand_water
+    shallow_water: tuple = Tiles.shallow_water
+    deep_water: tuple = Tiles.deep_water
 
 class Presets(Enum):
     @staticmethod
@@ -20,5 +21,5 @@ class Presets(Enum):
         return None
     
     green = Preset(name="green")
-    cold = Preset(name="cold", land=snow)
-    arctic = Preset(name="arctic", land=snow, coast_land=ice, coast_water=ice)
+    cold = Preset(name="cold", land=Tiles.snow)
+    arctic = Preset(name="arctic", land=Tiles.snow, coast_land=Tiles.ice, coast_water=Tiles.ice)

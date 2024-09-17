@@ -5,7 +5,7 @@ import webbrowser
 from PIL import ImageGrab
 from time import sleep
 from mindustry import convert_to_mindustry_map, set_preset
-from preset import Presets
+from presets import Presets
 
 def get_highest_counter():
     regex = re.compile(r'_(\d+)\.png$')
