@@ -7,7 +7,7 @@ import time
 input_water = (201, 201, 201)
 input_land = (245, 245, 245)
 
-def remap_to(array):
+def create_land_and_water(array):
     print("Mapping image to deep water and land...")
     colormap = {
         input_water: preset.deep_water,
@@ -38,7 +38,7 @@ def convert_to_mindustry_map(img):
     
     array = remove_alpha(np.array(img))
 
-    array = remap_to(array)
+    array = create_land_and_water(array)
     array = blend_shallow_water(array)
     array = blend_coast_land(array)
     array = blend_coast_water(array)

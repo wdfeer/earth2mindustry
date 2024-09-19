@@ -9,3 +9,5 @@ class Tiles(Enum):
     grass = (84, 132, 73)
     snow = (179, 183, 187)
     ice = (162, 162, 194)
+    dark_sand = (48, 46, 46)
+    dark_sand_water = (53, 55, 81)

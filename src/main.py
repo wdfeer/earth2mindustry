@@ -39,12 +39,12 @@ map_link = "https://mapstyle.withgoogle.com"
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
         print("Preset argument not specified. Defaulting to 'green'.")
-        preset = Presets.green
+        preset = Presets.green.value
     else:
         preset = Presets.find_preset_by_name(sys.argv[1])
         if preset == None:
             print("Invalid preset. Defaulting to 'green'.")
-            preset = Presets.green
+            preset = Presets.green.value
     
     clipboard_image = ImageGrab.grabclipboard()
     if clipboard_image is None:
