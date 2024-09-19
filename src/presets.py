@@ -22,4 +22,5 @@ class Presets(Enum):
     green = Preset()
     cold = Preset(land=Tiles.snow.value)
     arctic = Preset(land=Tiles.snow.value, coast_land=Tiles.ice.value, coast_water=Tiles.ice.value)
-    desert = Preset(land=Tiles.sand.value, coast_land=Tiles.dark_sand.value, coast_water=Tiles.dark_sand_water.value)
+    desert = Preset(land=Tiles.sand.value, coast_land=Tiles.grass.value, coast_water=Tiles.shallow_water.value)
+    wasteland = Preset(land=Tiles.sand.value, coast_land=Tiles.dark_sand.value, coast_water=Tiles.dark_sand_water.value)
