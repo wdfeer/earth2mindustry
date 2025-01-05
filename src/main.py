@@ -38,9 +38,10 @@ map_link = "https://mapstyle.withgoogle.com"
 
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
-        print("Preset argument not specified. Defaulting to 'green'.")
-        preset = Presets.green.value
+        print("Arguments not specified. Assuming standard Google Maps theme (roads allowed).")
+        preset = Presets.standard.value
     else:
+        print("Preset specified. Please use the Silver theme.")
         preset = Presets.find_preset_by_name(sys.argv[1])
         if preset == None:
             print("Invalid preset. Defaulting to 'green'.")

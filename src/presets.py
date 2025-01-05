@@ -19,6 +19,7 @@ class Presets(Enum):
                 return preset.value
         return None
     
+    standard = None
     green = Preset()
     cold = Preset(land=Tiles.snow.value)
     arctic = Preset(land=Tiles.snow.value, coast_land=Tiles.ice.value, coast_water=Tiles.ice.value)
