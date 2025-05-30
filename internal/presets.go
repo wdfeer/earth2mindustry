@@ -14,7 +14,7 @@ type Preset struct {
 }
 
 func Get_preset_from_args() Preset {
-	return Default // using default, no other presets yet
+	return Default // no other presets yet
 
 	var result mo.Option[Preset]
 	name := os.Args[1]
