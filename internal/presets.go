@@ -4,8 +4,6 @@ import (
 	"earth2mindustry/internal/px"
 	"earth2mindustry/internal/tiles"
 	"os"
-
-	"github.com/samber/mo"
 )
 
 type Preset struct {
@@ -14,22 +12,12 @@ type Preset struct {
 }
 
 func Get_preset_from_args() Preset {
-	return Default // no other presets yet
-
-	var result mo.Option[Preset]
 	name := os.Args[1]
 	if Presets[name].name != "" {
-		result = mo.Some(Presets[name])
+		return Presets[name]
 	} else {
-		result = mo.None[Preset]()
-	}
-
-	preset, present := result.Get()
-	if present {
 		println("No valid preset specified. Using the default preset.")
 		return Default
-	} else {
-		return preset
 	}
 }
 
