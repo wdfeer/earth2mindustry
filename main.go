@@ -11,7 +11,7 @@ func main() {
 	internal.Initialize_presets()
 	preset := internal.Get_preset_from_args()
 	if preset != nil {
-		internal.Write_clipboard_image_to(input_path)
-		internal.Convert_image(input_path, output_path, preset)
+		image := internal.Await_clipboard_image()
+		internal.Convert_image(image, preset, output_path)
 	}
 }

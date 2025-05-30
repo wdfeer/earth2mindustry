@@ -5,28 +5,19 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"io"
 	"math"
 	"os"
 )
 
-// Convert_image reads an image, maps each pixel to the closest match in the pixelmap, and saves the result.
-func Convert_image(input_path string, output_path string, pixelmap map[px.Pixel]px.Pixel) {
-	// Read image
-	inputFile, err := os.Open(input_path)
-	if err != nil {
-		panic(err)
-	}
-	defer inputFile.Close()
+func Try_decode_image(reader io.Reader) (image.Image, error) {
+	img, _, err := image.Decode(reader)
+	return img, err
+}
 
-	img, _, err := image.Decode(inputFile)
-	if err != nil {
-		panic(err)
-	}
+func Convert_image(image image.Image, pixelmap map[px.Pixel]px.Pixel, output_path string) {
+	outImg := map_to_closest(image, pixelmap)
 
-	// Convert image
-	outImg := map_to_closest(img, pixelmap)
-
-	// Save image
 	outputFile, err := os.Create(output_path)
 	if err != nil {
 		panic(err)

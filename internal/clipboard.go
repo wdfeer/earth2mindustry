@@ -1,32 +1,32 @@
 package internal
 
 import (
-	"fmt"
-	"io"
-	"os"
+	"image"
+	"time"
 
 	"github.com/skanehira/clipboard-image/v2"
 )
 
-func Write_clipboard_image_to(path string) {
+func Await_clipboard_image() image.Image {
 	reader, err := clipboard.Read()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to read image from clipboard: %v\n", err)
-		return
+		panic(err)
 	}
 
-	file, err := os.Create(path)
+	image, err := Try_decode_image(reader)
+
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to create file %s: %v\n", path, err)
-		return
+		println("Awaiting an image in the clipboard...")
 	}
-	defer file.Close()
+	for err != nil {
+		time.Sleep(200 * time.Millisecond)
 
-	_, err = io.Copy(file, reader)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to write image to file: %v\n", err)
-		return
+		reader, err = clipboard.Read()
+		if err != nil {
+			panic(err)
+		}
+		image, err = Try_decode_image(reader)
 	}
 
-	fmt.Printf("Image successfully written to %s\n", path)
+	return image
 }
