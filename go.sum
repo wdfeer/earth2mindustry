@@ -1,2 +1,6 @@
 github.com/samber/mo v1.14.0 h1:lRKVxkmlfN1m+i7kjycraJ78JdPcuxTm0pXOSh1+vl4=
 github.com/samber/mo v1.14.0/go.mod h1:BfkrCPuYzVG3ZljnZB783WIJIGk1mcZr9c9CPf8tAxs=
+github.com/skanehira/clipboard-image v1.0.0 h1:MJ5PeXxDMteS0HCsjvuoMscBi+AtoqCiPX7bZ2OAxDE=
+github.com/skanehira/clipboard-image v1.0.0/go.mod h1:WAxMgBkENpa206RHfrqV/5y8Kq7CitAozlvVxQxa9gs=
+github.com/skanehira/clipboard-image/v2 v2.0.0 h1:Kp+RNOgIlgzDkP3EskwuBnM0Fk4sc+HgcWE5RC+PnNI=
+github.com/skanehira/clipboard-image/v2 v2.0.0/go.mod h1:NXSYl4FJinIUFKJfeP1lGz8DIEUYjnEqwdMZ777S1E0=
