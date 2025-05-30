@@ -7,18 +7,19 @@ import (
 )
 
 type Preset struct {
+	Valid    bool
 	name     string
 	Pixelmap map[px.Pixel]px.Pixel
 }
 
 func Get_preset_from_args() Preset {
 	name := os.Args[1]
-	if Presets[name].name != "" {
-		return Presets[name]
-	} else {
-		println("No valid preset specified. Using the default preset.")
-		return Default
+
+	if !Presets[name].Valid {
+		println("No valid preset specified. Options: default")
 	}
+
+	return Presets[name]
 }
 
 var Presets map[string]Preset = map[string]Preset{
@@ -26,7 +27,8 @@ var Presets map[string]Preset = map[string]Preset{
 }
 
 var Default Preset = Preset{
-	name: "Default",
+	Valid: true,
+	name:  "default",
 	Pixelmap: map[px.Pixel]px.Pixel{
 		{R: 132, G: 215, B: 235}: tiles.Deep_water,
 		{R: 207, G: 246, B: 224}: tiles.Grass,
