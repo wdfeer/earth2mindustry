@@ -1,3 +1,3 @@
-module earth_to_mindustry
+module earth2mindustry
 
 go 1.24.3
