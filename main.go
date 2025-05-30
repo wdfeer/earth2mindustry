@@ -8,6 +8,7 @@ const input_path = "images/in.png"
 const output_path = "images/out.png"
 
 func main() {
+	internal.Initialize_presets()
 	preset := internal.Get_preset_from_args()
 	if preset.Valid {
 		internal.Write_clipboard_image_to(input_path)
