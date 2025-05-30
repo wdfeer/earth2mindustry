@@ -32,7 +32,7 @@ var Presets map[string]Preset = map[string]Preset{}
 func Initialize_presets() {
 	Presets["default"] =
 		map[px.Pixel]px.Pixel{
-			{R: 132, G: 215, B: 235}: tiles.Shallow_water,
+			{R: 132, G: 215, B: 235}: tiles.Deep_water,
 			{R: 207, G: 246, B: 224}: tiles.Grass,
 			{R: 154, G: 229, B: 194}: tiles.Grass,
 			{R: 245, G: 240, B: 230}: tiles.Sand,
