@@ -100,8 +100,16 @@ func blend_shallow_water(img image.Image, radius int) image.Image {
 
 func only_deep_water_nearby(img image.Image, posX int, posY int, radius int) bool {
 	bounds := img.Bounds()
-	for x := max(posX-radius, bounds.Min.X); x <= posX+radius && x < bounds.Max.X; x++ {
-		for y := max(posY-radius, bounds.Min.Y); y <= posY+radius && y < bounds.Max.Y; y++ {
+	radiusSquared := radius * radius
+
+	for x := max(posX-radius, bounds.Min.X); x <= min(posX+radius, bounds.Max.X-1); x++ {
+		for y := max(posY-radius, bounds.Min.Y); y <= min(posY+radius, bounds.Max.Y-1); y++ {
+			dx := x - posX
+			dy := y - posY
+			if dx*dx+dy*dy > radiusSquared {
+				continue // outside the circle
+			}
+
 			if !get_pixel(img, x, y).Equal(tiles.Deep_water) {
 				return false
 			}
