@@ -31,38 +31,42 @@ var presetKeys string
 var Presets map[string]Preset = map[string]Preset{}
 
 func InitializePresets() {
-	Presets["default"] =
-		map[px.Pixel]px.Pixel{
-			mapcolors.Water:  tiles.DeepWater,
-			mapcolors.Grass:  tiles.Grass,
-			mapcolors.Forest: tiles.Grass,
-			mapcolors.Sand:   tiles.Sand,
-			mapcolors.White:  tiles.Stone,
-			mapcolors.Border: tiles.DarkSand,
-			mapcolors.Road:   tiles.Stone,
-		}
-
-	Presets["snow"] =
-		map[px.Pixel]px.Pixel{
-			mapcolors.Water:  tiles.DeepWater,
-			mapcolors.Grass:  tiles.Snow,
-			mapcolors.Forest: tiles.Grass,
-			mapcolors.Sand:   tiles.Sand,
-			mapcolors.White:  tiles.Snow,
-			mapcolors.Road:   tiles.Stone,
-			mapcolors.Border: tiles.DarkSand,
-		}
-
-	Presets["desert"] =
-		map[px.Pixel]px.Pixel{
-			mapcolors.Water:  tiles.DeepWater,
-			mapcolors.Grass:  tiles.Grass,
-			mapcolors.Forest: tiles.Grass,
-			mapcolors.Sand:   tiles.Sand,
-			mapcolors.White:  tiles.Sand,
-			mapcolors.Road:   tiles.DarkSand,
-			mapcolors.Border: tiles.DarkSand,
-		}
+	Presets["default"] = map[px.Pixel]px.Pixel{
+		mapcolors.Border: tiles.DarkSand,
+		mapcolors.Forest: tiles.Grass,
+		mapcolors.Grass:  tiles.Grass,
+		mapcolors.Road:   tiles.Stone,
+		mapcolors.Sand:   tiles.Sand,
+		mapcolors.Water:  tiles.DeepWater,
+		mapcolors.White:  tiles.Stone,
+	}
+	Presets["snow"] = map[px.Pixel]px.Pixel{
+		mapcolors.Border: tiles.DarkSand,
+		mapcolors.Forest: tiles.Grass,
+		mapcolors.Grass:  tiles.Snow,
+		mapcolors.Road:   tiles.Stone,
+		mapcolors.Sand:   tiles.Sand,
+		mapcolors.Water:  tiles.DeepWater,
+		mapcolors.White:  tiles.Snow,
+	}
+	Presets["desert"] = map[px.Pixel]px.Pixel{
+		mapcolors.Border: tiles.DarkSand,
+		mapcolors.Forest: tiles.Grass,
+		mapcolors.Grass:  tiles.Grass,
+		mapcolors.Road:   tiles.DarkSand,
+		mapcolors.Sand:   tiles.Sand,
+		mapcolors.Water:  tiles.DeepWater,
+		mapcolors.White:  tiles.Sand,
+	}
+	Presets["wasteland"] = map[px.Pixel]px.Pixel{
+		mapcolors.Border: tiles.DarkSand,
+		mapcolors.Forest: tiles.DarkSand,
+		mapcolors.Grass:  tiles.Sand,
+		mapcolors.Road:   tiles.Stone,
+		mapcolors.Sand:   tiles.Sand,
+		mapcolors.Water:  tiles.DeepWater,
+		mapcolors.White:  tiles.DarkSand,
+	}
 
 	keys := make([]string, 0, len(Presets))
 	for k := range Presets {
