@@ -11,19 +11,19 @@ import (
 	"os"
 )
 
-func Try_decode_image(reader io.Reader) (image.Image, error) {
+func TryDecodeImage(reader io.Reader) (image.Image, error) {
 	img, _, err := image.Decode(reader)
 	return img, err
 }
 
-func Convert_image(image image.Image, pixelmap map[px.Pixel]px.Pixel, output_path string) {
+func ConvertImage(image image.Image, pixelmap map[px.Pixel]px.Pixel, outputPath string) {
 	println("Mapping each pixel to mindustry tiles...")
-	pixelmappedImg := map_to_closest(image, pixelmap)
+	pixelmappedImg := mapToClosest(image, pixelmap)
 
 	println("Blending shallow water...")
-	outImg := blend_shallow_water(pixelmappedImg, 6)
+	outImg := blendShallowWater(pixelmappedImg, 6)
 
-	outputFile, err := os.Create(output_path)
+	outputFile, err := os.Create(outputPath)
 	if err != nil {
 		panic(err)
 	}
@@ -33,18 +33,18 @@ func Convert_image(image image.Image, pixelmap map[px.Pixel]px.Pixel, output_pat
 	if err != nil {
 		panic(err)
 	}
-	println("Image successfully written to " + output_path)
+	println("Image successfully written to " + outputPath)
 }
 
-func map_to_closest(img image.Image, pixelmap map[px.Pixel]px.Pixel) image.Image {
+func mapToClosest(img image.Image, pixelmap map[px.Pixel]px.Pixel) image.Image {
 	bounds := img.Bounds()
 	newImg := image.NewNRGBA(bounds)
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			original := get_pixel(img, x, y)
+			original := getPixel(img, x, y)
 
-			closest := closest_pixel(original, pixelmap)
+			closest := closestPixel(original, pixelmap)
 			mapped := pixelmap[closest]
 
 			newImg.Set(x, y, color.RGBA{R: mapped.R, G: mapped.G, B: mapped.B, A: 255})
@@ -54,7 +54,7 @@ func map_to_closest(img image.Image, pixelmap map[px.Pixel]px.Pixel) image.Image
 	return newImg
 }
 
-func closest_pixel(p px.Pixel, pixelmap map[px.Pixel]px.Pixel) px.Pixel {
+func closestPixel(p px.Pixel, pixelmap map[px.Pixel]px.Pixel) px.Pixel {
 	var minDist float64 = math.MaxFloat64
 	var closest px.Pixel
 
@@ -76,17 +76,17 @@ func colorDistance(a, b px.Pixel) float64 {
 	return math.Sqrt(dr*dr + dg*dg + db*db)
 }
 
-func blend_shallow_water(img image.Image, radius int) image.Image {
+func blendShallowWater(img image.Image, radius int) image.Image {
 	bounds := img.Bounds()
 	newImg := image.NewNRGBA(bounds)
 
 	for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
 		for x := bounds.Min.X; x < bounds.Max.X; x++ {
-			original := get_pixel(img, x, y)
+			original := getPixel(img, x, y)
 			var new px.Pixel
 
-			if original.Equal(tiles.Deep_water) && !only_deep_water_nearby(img, x, y, radius) {
-				new = tiles.Shallow_water
+			if original.Equal(tiles.DeepWater) && !onlyDeepWaterNearby(img, x, y, radius) {
+				new = tiles.ShallowWater
 			} else {
 				new = original
 			}
@@ -98,7 +98,7 @@ func blend_shallow_water(img image.Image, radius int) image.Image {
 	return newImg
 }
 
-func only_deep_water_nearby(img image.Image, posX int, posY int, radius int) bool {
+func onlyDeepWaterNearby(img image.Image, posX int, posY int, radius int) bool {
 	bounds := img.Bounds()
 	radiusSquared := radius * radius
 
@@ -110,7 +110,7 @@ func only_deep_water_nearby(img image.Image, posX int, posY int, radius int) boo
 				continue // outside the circle
 			}
 
-			if !get_pixel(img, x, y).Equal(tiles.Deep_water) {
+			if !getPixel(img, x, y).Equal(tiles.DeepWater) {
 				return false
 			}
 		}
@@ -118,7 +118,7 @@ func only_deep_water_nearby(img image.Image, posX int, posY int, radius int) boo
 	return true
 }
 
-func get_pixel(img image.Image, x int, y int) px.Pixel {
+func getPixel(img image.Image, x int, y int) px.Pixel {
 	r, g, b, _ := img.At(x, y).RGBA()
 	return px.Pixel{
 		R: uint8(r >> 8),

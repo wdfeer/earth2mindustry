@@ -7,13 +7,13 @@ import (
 	"github.com/skanehira/clipboard-image/v2"
 )
 
-func Await_clipboard_image() image.Image {
+func AwaitClipboardImage() image.Image {
 	reader, err := clipboard.Read()
 	if err != nil {
 		panic(err)
 	}
 
-	image, err := Try_decode_image(reader)
+	image, err := TryDecodeImage(reader)
 
 	if err != nil {
 		println("Awaiting an image in the clipboard...")
@@ -25,7 +25,7 @@ func Await_clipboard_image() image.Image {
 		if err != nil {
 			panic(err)
 		}
-		image, err = Try_decode_image(reader)
+		image, err = TryDecodeImage(reader)
 	}
 
 	return image
