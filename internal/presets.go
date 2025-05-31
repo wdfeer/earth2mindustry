@@ -39,7 +39,7 @@ func InitializePresets() {
 			mapcolors.Sand:   tiles.Sand,
 			mapcolors.White:  tiles.Stone,
 			mapcolors.Border: tiles.DarkSand,
-			mapcolors.Road:   tiles.DarkSand,
+			mapcolors.Road:   tiles.Stone,
 		}
 
 	Presets["snow"] =
@@ -49,7 +49,7 @@ func InitializePresets() {
 			mapcolors.Forest: tiles.Grass,
 			mapcolors.Sand:   tiles.Sand,
 			mapcolors.White:  tiles.Snow,
-			mapcolors.Road:   tiles.DarkSand,
+			mapcolors.Road:   tiles.Stone,
 			mapcolors.Border: tiles.DarkSand,
 		}
 
