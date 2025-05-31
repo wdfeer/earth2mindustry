@@ -37,6 +37,7 @@ func Initialize_presets() {
 			{R: 154, G: 229, B: 194}: tiles.Grass,
 			{R: 245, G: 240, B: 230}: tiles.Sand,
 			{R: 247, G: 247, B: 247}: tiles.Stone,
+			{R: 25, G: 25, B: 25}:    tiles.Dark_sand,
 			{R: 167, G: 187, B: 214}: tiles.Dark_sand,
 		}
 
