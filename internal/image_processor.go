@@ -23,7 +23,7 @@ func ConvertImage(image image.Image, preset Preset, outputPath string) {
 	pixelmappedImg := mapToClosest(image, pixelmap)
 
 	println("Blending shallow water...")
-	outImg := blendShallowWater(pixelmappedImg, 6)
+	outImg := blendShallowWater(pixelmappedImg, preset.shallowWater, 6)
 
 	outputFile, err := os.Create(outputPath)
 	if err != nil {
@@ -78,7 +78,7 @@ func colorDistance(a, b px.Pixel) float64 {
 	return math.Sqrt(dr*dr + dg*dg + db*db)
 }
 
-func blendShallowWater(img image.Image, radius int) image.Image {
+func blendShallowWater(img image.Image, shallowWaterTile px.Pixel, radius int) image.Image {
 	bounds := img.Bounds()
 	newImg := image.NewNRGBA(bounds)
 
@@ -88,7 +88,7 @@ func blendShallowWater(img image.Image, radius int) image.Image {
 			var new px.Pixel
 
 			if original.Equal(tiles.DeepWater) && !onlyDeepWaterNearby(img, x, y, radius) {
-				new = tiles.ShallowWater
+				new = shallowWaterTile
 			} else {
 				new = original
 			}

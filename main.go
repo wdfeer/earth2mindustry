@@ -10,7 +10,7 @@ const outputPath = "images/out.png"
 func main() {
 	internal.InitializePresets()
 	preset := internal.GetPresetFromArgs()
-	if preset.Valid {
+	if preset.IsValid() {
 		image := internal.AwaitClipboardImage()
 		internal.ConvertImage(image, preset, outputPath)
 	}
