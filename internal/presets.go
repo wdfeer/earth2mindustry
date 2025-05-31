@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"earth2mindustry/internal/mapcolors"
 	"earth2mindustry/internal/px"
 	"earth2mindustry/internal/tiles"
 	"os"
@@ -32,33 +33,35 @@ var Presets map[string]Preset = map[string]Preset{}
 func InitializePresets() {
 	Presets["default"] =
 		map[px.Pixel]px.Pixel{
-			{R: 132, G: 215, B: 235}: tiles.DeepWater,
-			{R: 207, G: 246, B: 224}: tiles.Grass,
-			{R: 154, G: 229, B: 194}: tiles.Grass,
-			{R: 245, G: 240, B: 230}: tiles.Sand,
-			{R: 247, G: 247, B: 247}: tiles.Stone,
-			{R: 25, G: 25, B: 25}:    tiles.DarkSand,
-			{R: 167, G: 187, B: 214}: tiles.DarkSand,
+			mapcolors.Water:  tiles.DeepWater,
+			mapcolors.Grass:  tiles.Grass,
+			mapcolors.Forest: tiles.Grass,
+			mapcolors.Sand:   tiles.Sand,
+			mapcolors.White:  tiles.Stone,
+			mapcolors.Border: tiles.DarkSand,
+			mapcolors.Road:   tiles.DarkSand,
 		}
 
 	Presets["snow"] =
 		map[px.Pixel]px.Pixel{
-			{R: 132, G: 215, B: 235}: tiles.DeepWater,
-			{R: 207, G: 246, B: 224}: tiles.Snow,
-			{R: 154, G: 229, B: 194}: tiles.Grass,
-			{R: 245, G: 240, B: 230}: tiles.Sand,
-			{R: 247, G: 247, B: 247}: tiles.Snow,
-			{R: 167, G: 187, B: 214}: tiles.DarkSand,
+			mapcolors.Water:  tiles.DeepWater,
+			mapcolors.Grass:  tiles.Snow,
+			mapcolors.Forest: tiles.Grass,
+			mapcolors.Sand:   tiles.Sand,
+			mapcolors.White:  tiles.Snow,
+			mapcolors.Road:   tiles.DarkSand,
+			mapcolors.Border: tiles.DarkSand,
 		}
 
 	Presets["desert"] =
 		map[px.Pixel]px.Pixel{
-			{R: 132, G: 215, B: 235}: tiles.DeepWater,
-			{R: 207, G: 246, B: 224}: tiles.Snow,
-			{R: 154, G: 229, B: 194}: tiles.Grass,
-			{R: 245, G: 240, B: 230}: tiles.Sand,
-			{R: 247, G: 247, B: 247}: tiles.Sand,
-			{R: 167, G: 187, B: 214}: tiles.DarkSand,
+			mapcolors.Water:  tiles.DeepWater,
+			mapcolors.Grass:  tiles.Grass,
+			mapcolors.Forest: tiles.Grass,
+			mapcolors.Sand:   tiles.Sand,
+			mapcolors.White:  tiles.Sand,
+			mapcolors.Road:   tiles.DarkSand,
+			mapcolors.Border: tiles.DarkSand,
 		}
 
 	keys := make([]string, 0, len(Presets))
