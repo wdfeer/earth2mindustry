@@ -16,7 +16,9 @@ func TryDecodeImage(reader io.Reader) (image.Image, error) {
 	return img, err
 }
 
-func ConvertImage(image image.Image, pixelmap map[px.Pixel]px.Pixel, outputPath string) {
+func ConvertImage(image image.Image, preset Preset, outputPath string) {
+	pixelmap := preset.pixelmap
+
 	println("Mapping each pixel to mindustry tiles...")
 	pixelmappedImg := mapToClosest(image, pixelmap)
 

@@ -8,20 +8,23 @@ import (
 	"strings"
 )
 
-type Preset = map[px.Pixel]px.Pixel
+type Preset struct {
+	Valid    bool
+	pixelmap map[px.Pixel]px.Pixel
+}
 
 func GetPresetFromArgs() Preset {
 	if len(os.Args) < 2 {
 		println("No valid preset specified. Options:", presetKeys)
-		return nil
+		return Preset{}
 	}
 
 	name := os.Args[1]
 
-	if Presets[name] == nil {
-		println("No valid preset specified. Options:", presetKeys)
-	} else {
+	if Presets[name].Valid {
 		println("Selected", name, "preset.")
+	} else {
+		println("No valid preset specified. Options:", presetKeys)
 	}
 
 	return Presets[name]
@@ -30,8 +33,15 @@ func GetPresetFromArgs() Preset {
 var presetKeys string
 var Presets map[string]Preset = map[string]Preset{}
 
+func registerPreset(name string, pixelmap map[px.Pixel]px.Pixel) {
+	Presets[name] = Preset{
+		Valid:    true,
+		pixelmap: pixelmap,
+	}
+}
+
 func InitializePresets() {
-	Presets["default"] = map[px.Pixel]px.Pixel{
+	registerPreset("default", map[px.Pixel]px.Pixel{
 		mapcolors.Border: tiles.DarkSand,
 		mapcolors.Forest: tiles.Grass,
 		mapcolors.Grass:  tiles.Grass,
@@ -39,8 +49,8 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.Stone,
-	}
-	Presets["snow"] = map[px.Pixel]px.Pixel{
+	})
+	registerPreset("snow", map[px.Pixel]px.Pixel{
 		mapcolors.Border: tiles.DarkSand,
 		mapcolors.Forest: tiles.Grass,
 		mapcolors.Grass:  tiles.Snow,
@@ -48,8 +58,8 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.Snow,
-	}
-	Presets["desert"] = map[px.Pixel]px.Pixel{
+	})
+	registerPreset("desert", map[px.Pixel]px.Pixel{
 		mapcolors.Border: tiles.DarkSand,
 		mapcolors.Forest: tiles.Grass,
 		mapcolors.Grass:  tiles.Grass,
@@ -57,8 +67,8 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.Sand,
-	}
-	Presets["wasteland"] = map[px.Pixel]px.Pixel{
+	})
+	registerPreset("wasteland", map[px.Pixel]px.Pixel{
 		mapcolors.Border: tiles.DarkSand,
 		mapcolors.Forest: tiles.DarkSand,
 		mapcolors.Grass:  tiles.Sand,
@@ -66,7 +76,7 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.DarkSand,
-	}
+	})
 
 	keys := make([]string, 0, len(Presets))
 	for k := range Presets {
