@@ -46,7 +46,7 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.Stone,
-	}}
+	}, shallowWater: tiles.ShallowWater}
 	Presets["snow"] = Preset{pixelmap: map[px.Pixel]px.Pixel{
 		mapcolors.Border: tiles.DarkSand,
 		mapcolors.Forest: tiles.Grass,
@@ -55,7 +55,7 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.Snow,
-	}}
+	}, shallowWater: tiles.ShallowWater}
 	Presets["arctic"] = Preset{pixelmap: map[px.Pixel]px.Pixel{
 		mapcolors.Border: tiles.DarkSand,
 		mapcolors.Forest: tiles.Grass,
@@ -73,7 +73,7 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.Sand,
-	}}
+	}, shallowWater: tiles.ShallowWater}
 	Presets["wasteland"] = Preset{pixelmap: map[px.Pixel]px.Pixel{
 		mapcolors.Border: tiles.DarkSand,
 		mapcolors.Forest: tiles.DarkSand,
@@ -82,7 +82,7 @@ func InitializePresets() {
 		mapcolors.Sand:   tiles.Sand,
 		mapcolors.Water:  tiles.DeepWater,
 		mapcolors.White:  tiles.DarkSand,
-	}}
+	}, shallowWater: tiles.ShallowWater}
 
 	keys := make([]string, 0, len(Presets))
 	for k := range Presets {
